@@ -34,8 +34,11 @@ public class Book {
     @Column(name = "publisher_name", nullable = false, unique = false)
     private String publisherName;
 
+    //Indica relação 1 para 1 entre as tabelas
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE})
-    @JoinColumn(name = "author_id")
+    //() Estratégia de performance para criar, atualizar e remover
+
+    @JoinColumn(name = "author_id") //Indicar qual coluna vai fazer a relação (Chave Estrangeira)
     private Author author;
 
 }
