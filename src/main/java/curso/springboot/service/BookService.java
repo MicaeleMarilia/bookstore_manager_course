@@ -1,31 +1,31 @@
 package curso.springboot.service;
 
+import curso.springboot.dto.BookDTO;
 import curso.springboot.dto.MessageResponseDTO;
 import curso.springboot.entity.Book;
+import curso.springboot.mapper.BookMapper;
 import curso.springboot.repository.BookRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
-@Service //Indica ao framework que sera gerenciado pelo spring e tera outros serviços que podem ser enjetados
-
+@Service
 public class BookService {
 
-    private BookRepository bookRepository; //utilizar a classe Repository
+    private BookRepository bookRepository;
+
+    private final BookMapper bookMapper = BookMapper.INSTANCE;
 
     @Autowired
     public BookService(BookRepository bookRepository) {
         this.bookRepository = bookRepository;
     }
 
-    //metodo responsavel por realizar o cadastro dos livros
-    //Criar a classe MessageResponseDTO para retornar a mensagem
-    public MessageResponseDTO create(Book book){
+    public MessageResponseDTO create(BookDTO bookDTO) {
+        Book bookToSave = bookMapper.toModel(bookDTO);
 
-        //Chama o metodo save que esta dentro do Repository
-        Book savedBook = bookRepository.save(book);
+        Book savedBook = bookRepository.save(bookToSave);
         return MessageResponseDTO.builder()
-                .message("Book created whit ID " + savedBook.getId())
+                .message("Book created with ID " + savedBook.getId())
                 .build();
     }
 }
